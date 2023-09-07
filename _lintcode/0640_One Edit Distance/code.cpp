@@ -42,6 +42,7 @@ public:
             std::abs(lhs - rhs) > 1) {
             return false;
         }
+        if (s.empty() || t.empty()) return true;
 
         int left = 0;
         int right = 0;
