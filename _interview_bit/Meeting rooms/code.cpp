@@ -27,7 +27,6 @@
 //       ]
 // Output 2: 4
 
-// 1. sort array by interval begin
 // 1. make array with points [point, plus/minus room]
 // 2. scan array and do: +1 when start interval; -1 when end interval
 // 3. also while scaning watch the maximum of rooms
