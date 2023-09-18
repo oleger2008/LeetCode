@@ -1,3 +1,47 @@
+// Given the head of a singly linked list, reverse the list, and return the reversed list.
+
+// Example 1:
+// Input: head = [1,2,3,4,5]
+// Output: [5,4,3,2,1]
+
+// Example 2:
+// Input: head = [1,2]
+// Output: [2,1]
+
+// Example 3:
+// Input: head = []
+// Output: []
+
+// list.size: [0..5000]
+// node.val: [-5000..5000]
+
+//        tmp
+//        cur
+// prev
+// null -> 1 -> 2 -> 3 -> 4 -> 5 -> null
+
+//        tmp
+//             cur
+// prev
+// null -> 1 -> 2 -> 3 -> 4 -> 5 -> null
+
+//        tmp
+//             cur
+// prev
+// null <- 1    2 -> 3 -> 4 -> 5 -> null
+
+//        tmp
+//             cur
+//        prev
+// null <- 1    2 -> 3 -> 4 -> 5 -> null
+
+//             tmp
+//             cur
+//        prev
+// null <- 1    2 -> 3 -> 4 -> 5 -> null
+
+// repeate
+
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -8,36 +52,18 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-class Solution {
+class Solution { // time: O(n); mem: O(1)
 public:
-    // mine
-//     ListNode* reverseList(ListNode* head) {
-//         if (head == nullptr) {
-//             return nullptr;
-//         }
-//         ListNode *prev = nullptr;
-//         auto *temp = head->next;
-//         auto *cur = head;
-//         while (temp != nullptr) {
-//             cur->next = prev;
-            
-//             prev = cur;
-//             cur = temp;
-//             temp = temp->next;
-//         }
-//         cur->next = prev;
-//         return cur;
-//     }
-    
-    // other better
     ListNode* reverseList(ListNode* head) {
-        ListNode *nextNode, *prevNode = nullptr;
-        while (head) {
-            nextNode = head->next;
-            head->next = prevNode;
-            prevNode = head;
-            head = nextNode;
+        // 1 -> 2 -> 3 -> 4 -> 5
+        ListNode *prev = nullptr; // prev = 5
+        auto *cur = head; // cur = nullptr
+        while (cur != nullptr) { // nullptr != nullptr
+            auto *tmp = cur; // tmp = 5
+            cur = cur->next; // cur = nullptr
+            tmp->next = prev; // tmp->next = 4
+            prev = tmp; // prev = 5
         }
-        return prevNode;
+        return prev;
     }
 };
