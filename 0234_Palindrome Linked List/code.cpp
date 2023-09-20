@@ -1,3 +1,114 @@
+// Given the head of a singly linked list, return true if it is a
+// palindrome or false otherwise.
+
+// Example 1:
+// 1 -> 2 -> 2 -> 1
+// Input: head = [1,2,2,1]
+// Output: true
+
+// Example 2:
+// 1 -> 2
+// Input: head = [1,2]
+// Output: false
+
+// list.size: [1..10^5]
+// node.val: [0..9]
+
+// 1. find middle of linked list
+// 2. reverse right half of linked list
+// 3. start compare two halfs
+
+//-------------------------------------
+
+// 1. find middle of linked list
+// s
+// f
+// 1 -> 2 -> 2 -> 1 -> null
+
+//      s
+//           f
+// 1 -> 2 -> 2 -> 1 -> null
+
+//           s
+//                     f
+// 1 -> 2 -> 2 -> 1 -> null
+
+// 2. reverse second half
+//           cur
+//           tmp
+// 1 -> 2 -> 2 -> 1 -> null
+//
+//     null
+//     prev
+
+//                cur
+//           tmp
+// 1 -> 2 -> 2 -> 1 -> null
+//
+//     null
+//     prev
+
+//                      cur
+//                tmp
+// 1 -> 2 ->  - <- 2    1 -> null
+//          /
+//     null
+//     prev
+
+//                      cur
+//                tmp
+// 1 -> 2 ->  - <- 2    1 -> null
+//          /
+//     null
+//                prev
+
+//                      cur
+//                      tmp
+// 1 -> 2 ->  - <- 2    1 -> null
+//          /
+//     null
+//                prev
+
+//                           cur
+//                      tmp
+// 1 -> 2 ->  - <- 2    1 -> null
+//          /
+//     null
+//                prev
+
+//                           cur
+//                      tmp
+// 1 -> 2 ->  - <- 2 <- 1    null
+//          /
+//     null
+//                prev
+
+//                           cur
+//                      tmp
+// 1 -> 2 ->  - <- 2 <- 1    null
+//          /
+//     null
+//                      prev
+
+// 3. start compare two halfs
+// head
+// 1 -> 2 ->  - <- 2 <- 1    null
+//          /
+//     null
+//                      prev
+
+//      head
+// 1 -> 2 ->  - <- 2 <- 1    null
+//          /
+//     null
+//                 prev
+
+//                 head
+// 1 -> 2 ->  - <- 2 <- 1    null
+//          /
+//     null (cond for stop)
+//     prev
+
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -9,53 +120,37 @@
  * };
  */
 
-// [1, 2, 3, 2, 1] NULL
-// 1, 2, 3 <- mid
-// 1, 3, 1
-    
-// [1, 2, 3, 1] NULL
-// 1, 2, 3 <- mid
-// 1, 3, NULL
-
-// [1, 2] NULL
-// 1, 2 <- mid
-// 2, NULL
-
-class Solution {
+class Solution { // time: O(n), mem: O(1)
 public:
-    // v1 My naive
     bool isPalindrome(ListNode *const head) {
-        if (head == nullptr) {
-            return false;
-        }
+        // 1. find middle of linked list
         auto *slow = head;
         auto *fast = head;
-        while (fast != nullptr && fast->next != nullptr) {
+        while (fast && fast->next) {
             slow = slow->next;
             fast = fast->next->next;
         }
-        
-        //try to reverse right half of list
-        auto *prev = slow;
-        slow = slow->next;
-        prev->next = nullptr;
-        while (slow != nullptr) {
-            auto *temp = slow->next;
-            slow->next = prev;
-            prev = slow;
-            slow = temp;
+
+        // 2. reverse second half
+        ListNode *prev = nullptr;
+        auto *cur = slow;
+        while (cur) {
+            auto *tmp = cur;
+            cur = cur->next;
+            tmp->next = prev;
+            prev = tmp;
         }
-        
-        slow = prev;
-        fast = head;
-        while (slow != nullptr) {
-            if (slow->val != fast->val) {
+
+        // 3. start compare two halfs
+        auto *left = head;
+        auto *right = prev;
+        while (right) {
+            if (left->val != right->val) {
                 return false;
             }
-            slow = slow->next;
-            fast = fast->next;
+            left = left->next;
+            right = right->next;
         }
-        
         return true;
     }
 };
